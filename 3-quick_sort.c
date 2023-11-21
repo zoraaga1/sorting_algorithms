@@ -36,7 +36,7 @@ void quick_sort_recursive(int *array, int low, int high, size_t size)
 
 /**
  * lomuto_partition - Lomuto partition scheme for Quick Sort
- * @array: The array to be partitioned
+ * @arr: The array to be partitioned
  * @low: The low index of the partition
  * @high: The high index of the partition
  * @size: The size of the array
