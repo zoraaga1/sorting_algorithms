@@ -1,97 +1,81 @@
 #include "sort.h"
 
 /**
- * cocktail_sort_list - Sorts a doubly linked list of integers
- *                      in ascending order using Cocktail Shaker Sort
- * @list: Pointer to a pointer to the head of the list
+ * swap_nodes - Swaps two nodes in a doubly linked list.
+ * @head: A pointer to the head of the doubly linked list.
+ * @node1: A pointer to the first node to be swapped.
+ * @node2: A pointer to the second node to be swapped.
+ */
+void swap_nodes(listint_t **head, listint_t *node1, listint_t *node2)
+{
+	listint_t *temp;
+
+	if (node1 == NULL || node2 == NULL || node1 == node2)
+		return;
+
+	if (node1->prev != NULL)
+		node1->prev->next = node2;
+	else
+		*head = node2;
+
+	if (node2->prev != NULL)
+		node2->prev->next = node1;
+	else
+		*head = node1;
+
+	temp = node1->next;
+	node1->next = node2->next;
+	node2->next = temp;
+
+	temp = node1->prev;
+	node1->prev = node2->prev;
+	node2->prev = temp;
+}
+
+/**
+ * cocktail_sort_list - Sorts a doubly linked list in ascending order using
+ *                      the Cocktail Shaker Sort algorithm.
+ * @list: A pointer to the head of the doubly linked list.
  */
 void cocktail_sort_list(listint_t **list)
 {
 	int swapped;
-	listint_t *temp;
+	listint_t *current;
+	listint_t *last = NULL;
 
-	if (list == NULL || *list == NULL)
+	if (list == NULL || *list == NULL || (*list)->next == NULL)
 		return;
+
 
 	do {
 		swapped = 0;
+		current = *list;
 
-		for (temp = *list; temp->next != NULL; temp = temp->next)
+		while (current->next != last)
 		{
-			if (temp->n > temp->next->n)
+			if (current->n > current->next->n)
 			{
-				swap_nodes(temp, temp->next, list);
+				swap_nodes(list, current, current->next);
 				swapped = 1;
 				print_list(*list);
 			}
+			current = current->next;
 		}
 
 		if (!swapped)
 			break;
 
-		swapped = 0;
+		last = current;
 
-		for (; temp->prev != NULL; temp = temp->prev)
+		while (current->prev != NULL)
 		{
-			if (temp->n < temp->prev->n)
+			if (current->n < current->prev->n)
 			{
-				swap_nodes(temp->prev, temp, list);
+				swap_nodes(list, current->prev, current);
 				swapped = 1;
 				print_list(*list);
 			}
+			current = current->prev;
 		}
-
 	} while (swapped);
-}
-
-/**
- * swap_nodes - Swaps two nodes in a doubly linked list
- * @node1: First node to be swapped
- * @node2: Second node to be swapped
- * @list: Pointer to a pointer to the head of the list
- */
-void swap_nodes(listint_t *node1, listint_t *node2, listint_t **list)
-{
-	listint_t *prev1, *next1, *prev2, *next2;
-
-    if (node1 == NULL || node2 == NULL)
-        return;
-
-    prev1 = node1->prev;
-    next1 = node1->next;
-    prev2 = node2->prev;
-    next2 = node2->next;
-
-    if (prev1 != NULL)
-        prev1->next = node2;
-    else
-        *list = node2;
-
-    if (next1 != NULL)
-        next1->prev = node2;
-
-    node2->prev = prev1;
-    node2->next = node1;
-    node1->prev = node2;
-    node1->next = next2;
-
-    if (next2 != NULL)
-        next2->prev = node1;
-}
-
-/**
- * get_dlistint_lelem - Returns the last element of a doubly linked list
- * @h: Pointer to the head of the list
- *
- * Return: Pointer to the last element of the list, or NULL if the list is empty
- */
-listint_t *get_dlistint_lelem(listint_t *h)
-{
-    if (h == NULL)
-        return NULL;
-
-    while (h->next != NULL)
-        h = h->next;
-
-    return h;
 }
