@@ -78,3 +78,20 @@ void swap_nodes(listint_t *node1, listint_t *node2, listint_t **list)
     if (next2 != NULL)
         next2->prev = node1;
 }
+
+/**
+ * get_dlistint_lelem - Returns the last element of a doubly linked list
+ * @h: Pointer to the head of the list
+ *
+ * Return: Pointer to the last element of the list, or NULL if the list is empty
+ */
+listint_t *get_dlistint_lelem(listint_t *h)
+{
+    if (h == NULL)
+        return NULL;
+
+    while (h->next != NULL)
+        h = h->next;
+
+    return h;
+}
